@@ -57,7 +57,7 @@ namespace InstantBuyOnlyCompany
                                         "数字使用逗号隔开，如-1,0,1,2    -1是用来占位的，具体哪个数字对应哪个物品请到雷电商城的mod介绍页查看");
 
             harmony.PatchAll();
-            Logger.LogInfo("InstantBuyOnlyCompany " + modVersion + " loaded.");
+            Logger.LogInfo($"Plugin {modGUID} {modVersion} is loaded!");
 
             
         }
