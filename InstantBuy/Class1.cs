@@ -69,18 +69,28 @@ namespace InstantBuyOnlyCompany
         {
             private static List<int> instantItems;
 
-            static bool IsCompany() {
+            static bool IsInstantBuyAllowed() {
                 var roundManager = RoundManager.Instance;
                 if (roundManager == null) {
                     return false;
                 }
 
+                var startOfRound = StartOfRound.Instance;
+                if (startOfRound == null) {
+                    return false;
+                }
+
+                // Current selected level in orbit / Current landed level
                 var currentLevel = roundManager.currentLevel;
                 if (currentLevel == null) {
                     return false;
                 }
 
-                return currentLevel.sceneName == "CompanyBuilding";
+                var isCompanySelectedOrLanded = currentLevel.sceneName == "CompanyBuilding";
+                var inShipPhase = startOfRound.inShipPhase;
+
+                // Only allow in Company and not in ship phase (orbit)
+                return isCompanySelectedOrLanded && !inShipPhase;
             }
 
             [HarmonyPatch("SyncGroupCreditsClientRpc")]
@@ -94,8 +104,8 @@ namespace InstantBuyOnlyCompany
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
                 List<int> ignoredItem_list = InstantBuyOnlyCompany.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
-                if (! IsCompany()) {
-                    // Disable instant buy in moons except Company (Ignore all items)
+                if (! IsInstantBuyAllowed()) {
+                    // Disable instant buy (Ignore all items)
                     ignoredItem_list = boughtItems.ToList();
                 }
                 instantItems = boughtItems.Where(item => !ignoredItem_list.Contains(item)).ToList();
@@ -117,8 +127,8 @@ namespace InstantBuyOnlyCompany
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
                 List<int> ignoredItem_list = InstantBuyOnlyCompany.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
-                if (! IsCompany()) {
-                    // Disable instant buy in moons except Company (Ignore all items)
+                if (! IsInstantBuyAllowed()) {
+                    // Disable instant buy (Ignore all items)
                     ignoredItem_list = boughtItems.ToList();
                 }
                 instantItems = boughtItems.Where(item => !ignoredItem_list.Contains(item)).ToList();
