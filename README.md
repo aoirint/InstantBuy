@@ -1,4 +1,4 @@
-# InstantBuy
+# InstantBuyOnlyCompany
 
 ## features (功能)
 

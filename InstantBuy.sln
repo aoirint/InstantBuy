@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{24619123-ECA3-4740-853A-EB06B667701F}") = "InstantBuy", "InstantBuy\InstantBuy.csproj", "{E4EE69A7-755B-4A5D-A42F-E7E64A87BB30}"
+Project("{24619123-ECA3-4740-853A-EB06B667701F}") = "InstantBuyOnlyCompany", "InstantBuy\InstantBuy.csproj", "{E4EE69A7-755B-4A5D-A42F-E7E64A87BB30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

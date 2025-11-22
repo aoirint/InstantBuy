@@ -17,24 +17,24 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
-namespace InstantBuy
+namespace InstantBuyOnlyCompany
 {
     /// <summary>
     /// 插件加载
     /// </summary>
     [BepInPlugin(modGUID, modName, modVersion)]
-    public class InstantBuy : BaseUnityPlugin
+    public class InstantBuyOnlyCompany : BaseUnityPlugin
     {
-        private const string modGUID = "nexor.InstantBuy";
-        private const string modName = "InstantBuy";
-        private const string modVersion = "0.0.5";
+        private const string modGUID = "com.aoirint.InstantBuyOnlyCompany";
+        private const string modName = "InstantBuyOnlyCompany";
+        private const string modVersion = "0.1.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
         public ConfigEntry<float> offset;
         public ConfigEntry<string> ignored_item;
 
-        public static InstantBuy Instance;
+        public static InstantBuyOnlyCompany Instance;
 
 
         // 在插件启动时会直接调用Awake()方法
@@ -45,19 +45,19 @@ namespace InstantBuy
                 Instance = this;
             }
 
-            offset = Config.Bind<float>("InstantBuy Config",
+            offset = Config.Bind<float>("InstantBuyOnlyCompany Config",
                                         "offset 偏移",
                                         0.2f,
                                         "Controls the offset of where purchased items are generated 控制购买物品生成位置的偏移");
 
-            ignored_item = Config.Bind<string>("InstantBuy Config",
+            ignored_item = Config.Bind<string>("InstantBuyOnlyCompany Config",
                                         "ignored_item 不会触发该mod的物品名单",
                                         "-1,",
                                         "Numbers are separated by commas, e.g. -1,0,1,2    -1 is used as a placeholder, please go to the mod introduction page in the ThunderStore to check which number corresponds to which item. " +
                                         "数字使用逗号隔开，如-1,0,1,2    -1是用来占位的，具体哪个数字对应哪个物品请到雷电商城的mod介绍页查看");
 
             harmony.PatchAll();
-            Logger.LogInfo("InstantBuy " + modVersion + " loaded.");
+            Logger.LogInfo("InstantBuyOnlyCompany " + modVersion + " loaded.");
 
             
         }
@@ -94,7 +94,7 @@ namespace InstantBuy
 
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
-                List<int> ignoredItem_list = InstantBuy.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
+                List<int> ignoredItem_list = InstantBuyOnlyCompany.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
                 if (! IsCompany()) {
                     // Disable instant buy in moons except Company (Ignore all items)
                     ignoredItem_list = boughtItems.ToList();
@@ -117,7 +117,7 @@ namespace InstantBuy
 
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
-                List<int> ignoredItem_list = InstantBuy.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
+                List<int> ignoredItem_list = InstantBuyOnlyCompany.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
                 if (! IsCompany()) {
                     // Disable instant buy in moons except Company (Ignore all items)
                     ignoredItem_list = boughtItems.ToList();
@@ -133,17 +133,17 @@ namespace InstantBuy
                 foreach (int itemIndex in instantItems)
                 {
                     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(__instance.buyableItemsList[itemIndex].spawnPrefab,
-                        new Vector3(spawn_pos.x + UnityEngine.Random.Range(-InstantBuy.Instance.offset.Value, InstantBuy.Instance.offset.Value), spawn_pos.y,
-                        spawn_pos.z + UnityEngine.Random.Range(-InstantBuy.Instance.offset.Value, InstantBuy.Instance.offset.Value)), Quaternion.identity, StartOfRound.Instance.propsContainer);
+                        new Vector3(spawn_pos.x + UnityEngine.Random.Range(-InstantBuyOnlyCompany.Instance.offset.Value, InstantBuyOnlyCompany.Instance.offset.Value), spawn_pos.y,
+                        spawn_pos.z + UnityEngine.Random.Range(-InstantBuyOnlyCompany.Instance.offset.Value, InstantBuyOnlyCompany.Instance.offset.Value)), Quaternion.identity, StartOfRound.Instance.propsContainer);
                     gameObject.GetComponent<GrabbableObject>().fallTime = 0f;
                     gameObject.GetComponent<GrabbableObject>().isInShipRoom = true;
                     gameObject.GetComponent<GrabbableObject>().transform.parent = GameObject.Find("/Environment/HangarShip").transform;
                     gameObject.GetComponent<NetworkObject>().Spawn(false);
-                    // InstantBuy.Logger.LogInfo("已完成实例化: " + gameObject.GetComponent<GrabbableObject>().itemProperties.itemName);
+                    // InstantBuyOnlyCompany.Logger.LogInfo("已完成实例化: " + gameObject.GetComponent<GrabbableObject>().itemProperties.itemName);
                 }
 
                 __instance.orderedItemsFromTerminal = boughtItems.Where(item => ignoredItem_list.Contains(item)).ToList();
-                // InstantBuy.Logger.LogInfo("正常退出");
+                // InstantBuyOnlyCompany.Logger.LogInfo("正常退出");
             }
         }
 
@@ -169,7 +169,7 @@ namespace InstantBuy
                 Logger.LogInfo("我是server");
 
                 // 过滤出需要瞬间生成的物品类
-                List<int> ignoredItem_list = InstantBuy.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
+                List<int> ignoredItem_list = InstantBuyOnlyCompany.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
                 instantItems = boughtItems.Where(item => !ignoredItem_list.Contains(item)).ToList();
 
                 // 修改同步给客机的在途物品数量
@@ -181,8 +181,8 @@ namespace InstantBuy
                 foreach (int itemIndex in instantItems)
                 {
                     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(__instance.buyableItemsList[itemIndex].spawnPrefab,
-                        new Vector3(spawn_pos.x + UnityEngine.Random.Range(-InstantBuy.Instance.offset.Value, InstantBuy.Instance.offset.Value), spawn_pos.y,
-                        spawn_pos.z + UnityEngine.Random.Range(-InstantBuy.Instance.offset.Value, InstantBuy.Instance.offset.Value)), Quaternion.identity, StartOfRound.Instance.propsContainer);
+                        new Vector3(spawn_pos.x + UnityEngine.Random.Range(-InstantBuyOnlyCompany.Instance.offset.Value, InstantBuyOnlyCompany.Instance.offset.Value), spawn_pos.y,
+                        spawn_pos.z + UnityEngine.Random.Range(-InstantBuyOnlyCompany.Instance.offset.Value, InstantBuyOnlyCompany.Instance.offset.Value)), Quaternion.identity, StartOfRound.Instance.propsContainer);
                     gameObject.GetComponent<GrabbableObject>().fallTime = 0f;
                     gameObject.GetComponent<GrabbableObject>().isInShipRoom = true;
                     gameObject.GetComponent<GrabbableObject>().transform.parent = GameObject.Find("/Environment/HangarShip").transform;
