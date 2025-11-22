@@ -35,7 +35,6 @@ namespace InstantBuy
         public ConfigEntry<string> ignored_item;
 
         public static InstantBuy Instance;
-        public static BepInEx.Logging.ManualLogSource Logger;
 
 
         // 在插件启动时会直接调用Awake()方法
@@ -57,7 +56,6 @@ namespace InstantBuy
                                         "Numbers are separated by commas, e.g. -1,0,1,2    -1 is used as a placeholder, please go to the mod introduction page in the ThunderStore to check which number corresponds to which item. " +
                                         "数字使用逗号隔开，如-1,0,1,2    -1是用来占位的，具体哪个数字对应哪个物品请到雷电商城的mod介绍页查看");
 
-            Logger = base.Logger;
             harmony.PatchAll();
             Logger.LogInfo("InstantBuy " + modVersion + " loaded.");
 
