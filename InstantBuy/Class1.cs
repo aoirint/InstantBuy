@@ -48,13 +48,12 @@ namespace InstantBuyOnlyCompany
             offset = Config.Bind<float>("InstantBuyOnlyCompany Config",
                                         "offset",
                                         0.2f,
-                                        "Controls the offset of where purchased items are generated 控制购买物品生成位置的偏移");
+                                        "Controls the offset of where purchased items are generated.");
 
             ignored_item = Config.Bind<string>("InstantBuyOnlyCompany Config",
                                         "ignored_item",
                                         "-1,",
-                                        "Numbers are separated by commas, e.g. -1,0,1,2    -1 is used as a placeholder, please go to the mod introduction page in the ThunderStore to check which number corresponds to which item. " +
-                                        "数字使用逗号隔开，如-1,0,1,2    -1是用来占位的，具体哪个数字对应哪个物品请到雷电商城的mod介绍页查看");
+                                        "Numbers are separated by commas, e.g. -1,0,1,2    -1 is used as a placeholder, please go to the mod introduction page in the ThunderStore to check which number corresponds to which item.");
 
             harmony.PatchAll();
             Logger.LogInfo($"Plugin {modGUID} {modVersion} is loaded!");
