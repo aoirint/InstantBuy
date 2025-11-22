@@ -70,6 +70,19 @@ namespace InstantBuy
         {
             private static List<int> instantItems;
 
+            static bool IsCompany() {
+                var roundManager = RoundManager.Instance;
+                if (roundManager == null) {
+                    return false;
+                }
+
+                var currentLevel = roundManager.currentLevel;
+                if (currentLevel == null) {
+                    return false;
+                }
+
+                return currentLevel.sceneName == "CompanyBuilding";
+            }
 
             [HarmonyPatch("SyncGroupCreditsClientRpc")]
             [HarmonyPrefix]
@@ -82,6 +95,10 @@ namespace InstantBuy
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
                 List<int> ignoredItem_list = InstantBuy.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
+                if (! IsCompany()) {
+                    // Disable instant buy in moons except Company (Ignore all items)
+                    ignoredItem_list = boughtItems.ToList();
+                }
                 instantItems = boughtItems.Where(item => !ignoredItem_list.Contains(item)).ToList();
 
                 // 同步在途物品数量
@@ -101,6 +118,10 @@ namespace InstantBuy
 
                 List<int> boughtItems = __instance.orderedItemsFromTerminal;
                 List<int> ignoredItem_list = InstantBuy.Instance.ignored_item.Value.Trim(',').Split(',').Select(int.Parse).ToList();
+                if (! IsCompany()) {
+                    // Disable instant buy in moons except Company (Ignore all items)
+                    ignoredItem_list = boughtItems.ToList();
+                }
                 instantItems = boughtItems.Where(item => !ignoredItem_list.Contains(item)).ToList();
 
 
