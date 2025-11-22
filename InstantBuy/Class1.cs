@@ -33,7 +33,7 @@ namespace InstantBuyOnlyCompany
 
         public ConfigEntry<float> offset;
         public ConfigEntry<string> ignored_item;
-        public ConfigEntry<bool> dropSoundEffectEnabled;
+        public ConfigEntry<bool> dropSoundEffectMuted;
 
         public static InstantBuyOnlyCompany Instance;
 
@@ -56,11 +56,11 @@ namespace InstantBuyOnlyCompany
                                         "-1,",
                                         "Numbers are separated by commas, e.g. -1,0,1,2    -1 is used as a placeholder, please go to the mod introduction page in the ThunderStore to check which number corresponds to which item.");
 
-            dropSoundEffectEnabled = Config.Bind(
+            dropSoundEffectMuted = Config.Bind(
                 "InstantBuyOnlyCompany Config",
-                "Drop Sound Effect Enabled",
-                false,
-                "Controls the drop sound effect (noisy for many items) when items are instantly spawned."
+                "Drop Sound Effect Muted",
+                true,
+                "Disable the drop sound effect when purchased items are generated."
             );
 
             harmony.PatchAll();
@@ -155,7 +155,7 @@ namespace InstantBuyOnlyCompany
                     gameObject.GetComponent<GrabbableObject>().fallTime = 0f;
 
                     // If hasHitGround is true, the drop sound effect (noisy for many items) will not play
-                    gameObject.GetComponent<GrabbableObject>().hasHitGround = !InstantBuyOnlyCompany.Instance.dropSoundEffectEnabled.Value;
+                    gameObject.GetComponent<GrabbableObject>().hasHitGround = InstantBuyOnlyCompany.Instance.dropSoundEffectMuted.Value;
 
                     gameObject.GetComponent<GrabbableObject>().isInShipRoom = true;
                     gameObject.GetComponent<GrabbableObject>().transform.parent = GameObject.Find("/Environment/HangarShip").transform;
